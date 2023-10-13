@@ -2,9 +2,11 @@
 
 namespace controllers;
 
-class UserController
+use myFunction\Controller;
+
+class UserController extends Controller
 {
 public static function list(){
-    echo "oio";
+    echo "hello world";
 }
 }

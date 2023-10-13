@@ -37,7 +37,9 @@
       <td><?php echo $key->description; ?></td>
       <td><?php echo $key->price; ?></td>
         <td>
-            <img src="<?php echo $key->image; ?>" alt="Image" >
+            <img src="<?php
+            $photoPath = $key->image;
+            echo '/'.$photoPath; ?>" alt="Image" width="100" height="100" >
 
         </td>
 
