@@ -22,7 +22,11 @@ class Controller
         }
         return true;
     }
-
+    public function redirect($url)
+    {
+        header("Location: $url");
+        exit;
+    }
     public function valid_password($password) {
             $length = strlen($password);
 

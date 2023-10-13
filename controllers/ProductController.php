@@ -31,17 +31,17 @@ class ProductController extends Controller
                 $allowedFormats = ['jpg', 'jpeg', 'png'];
                 $fileExtension = strtolower(pathinfo($uploadPath, PATHINFO_EXTENSION));
                 if (!in_array($fileExtension, $allowedFormats)) {
-                    echo "Недопустимый формат изображения. Пожалуйста, выберите файл в формате jpg, jpeg или png.";
+                    echo "Invalid image format. Please select a jpg, jpeg or png file.";
                 } elseif ($image['size'] < 10000 || $image['size'] > 1000000) {
-                    echo "Размер файла должен быть от 10 Kb до 1 Mb.";
+                    echo "The file size must be from 10 Kb to 1 Mb";
                 } elseif (move_uploaded_file($image['tmp_name'], $uploadPath)) {
                     $product = new Product();
                     $product->addProduct($name, $description, $price, $uploadPath);
                 } else {
-                    echo "Ошибка при загрузке файла.";
+                    echo "error download photo";
                 }
             } else {
-                echo "Пожалуйста, выберите файл изображения.";
+                echo "please choose file photo";
             }
         }
         $this->view->render('product/create');
@@ -53,12 +53,13 @@ class ProductController extends Controller
     public function update($id)
     {
         $productModel = new Product();
+        $product = $productModel->getById($id);
+        $photo = $product->image;
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $name = $_POST['name'];
             $description = $_POST['description'];
             $price = $_POST['price'];
-            $photo = null;
 
             if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
                 $uploadDir = 'uploads/';
@@ -66,16 +67,17 @@ class ProductController extends Controller
 
                 if (move_uploaded_file($_FILES['photo']['tmp_name'], $uploadFile)) {
                     $photo = $uploadFile;
+                } else {
+                    echo "Error loading file";
                 }
             }
 
             $productModel->updateProduct($id, $name, $description, $price, $photo);
         }
 
-        $product = $productModel->getById($id);
         $this->view->render('product/update', ['product' => $product]);
-
     }
+
 
 
 
